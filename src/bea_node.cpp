@@ -24,15 +24,13 @@ public:
         driver = new VISIOSCANDriver();
 
         std::cout << "Connecting to scanner at " << laser_ip << " ... " << std::endl;
-        if(driver->connect(laser_ip, laser_port))
+        while(!driver->connect(laser_ip, laser_port))
         {
-            std::cout << "@BEANode::connect OK" << std::endl;
+            std::cout << "Connecting to scanner at " << laser_ip << ":" << laser_port << " failed! Retrying..."
+                      << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         }
-        else
-        {
-            std::cout << "Connecting to scanner at " << laser_ip << ":" << laser_port << " failed!" << std::endl;
-            return -1;
-        }
+        std::cout << "@BEANode::connect OK" << std::endl;
 
         auto params = driver->GetParameters();
         float angleMin, angleMax, deltaAngle;
