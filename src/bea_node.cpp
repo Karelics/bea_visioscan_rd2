@@ -26,6 +26,7 @@ public:
         std::cout << "Connecting to scanner at " << laser_ip << " ... " << std::endl;
         while(!driver->connect(laser_ip, laser_port))
         {
+            driver->disconnect();
             std::cout << "Connecting to scanner at " << laser_ip << ":" << laser_port << " failed! Retrying..."
                       << std::endl;
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
